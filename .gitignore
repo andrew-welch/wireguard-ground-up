@@ -1,1 +1,1 @@
-packer/sensitive-variables.pkrvars.hcl
+packer/sensitive-variables.auto.pkrvars.hcl
