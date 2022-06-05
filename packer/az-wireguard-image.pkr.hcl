@@ -13,7 +13,7 @@ source "azure-arm" "image-create" {
     subscription_id     = sensitive_subscription_id
     tenant_id           = sensitive_tenant_id
 
-      managed_image_name = "az-wireguard-image-noconfig"
+    managed_image_name = "az-wireguard-image-noconfig"
     managed_image_resource_group_name = "az-wireguard-ground-up"
 
     os_type         = "Linux"
