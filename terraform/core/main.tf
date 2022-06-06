@@ -30,3 +30,5 @@ resource "azurerm_resource_group" "rg" {
   	ManagedBy = "Terraform"
   }
 }
+
+#ping
