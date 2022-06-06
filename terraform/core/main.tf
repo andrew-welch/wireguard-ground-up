@@ -32,3 +32,4 @@ resource "azurerm_resource_group" "rg" {
 }
 
 #ping
+#push to main
