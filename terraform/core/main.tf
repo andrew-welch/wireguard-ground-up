@@ -32,5 +32,16 @@ resource "azurerm_resource_group" "rg" {
   }
 }
 
+resource "azurerm_storage_account" "SA" {
+  name                     = "WG-VPN-Storage"
+  resource_group_name      = azurerm_resource_group.rg.name
+  location                 = azurerm_resource_group.rg.location
+  account_tier             = "Standard"
+  account_replication_type = "LRS"
+  lifecycle {
+    prevent_destroy = true
+  }
+}
+
 #ping
 #push to main
