@@ -28,6 +28,7 @@ resource "azurerm_resource_group" "rg" {
   location = var.resource_location
   tags = {
   	ManagedBy = "Terraform"
+    
   }
 }
 
