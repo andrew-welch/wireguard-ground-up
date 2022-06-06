@@ -1,2 +1,2 @@
 packer/sensitive-variables.auto.pkrvars.hcl
-#sensitive*
+sensitive*
