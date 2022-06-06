@@ -7,7 +7,21 @@ packer {
   }
 }
 
+variable "AZURE_CLIENT_ID" {
+  default = env("AZURE_CLIENT_ID")
+}
 
+variable "AZURE_CLIENT_SECRET" {
+  default = env("AZURE_CLIENT_SECRET")
+}
+
+variable "AZURE_SUBSCRIPTION_ID" {
+  default = env("AZURE_SUBSCRIPTION_ID")
+}
+
+variable "AZURE_TENANT_ID" {
+  default = env("AZURE_TENANT_ID")
+}
 
 source "azure-arm" "image-create" {
     client_id           = AZURE_CLIENT_ID
