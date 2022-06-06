@@ -4,6 +4,10 @@ name: Packer
 
 on:
   push:
+    paths:
+      - 'packer/**'
+      - '.github/workflows/packerbuild.yml'
+
 
 jobs:
   packer:
