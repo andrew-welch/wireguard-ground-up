@@ -12,7 +12,7 @@ terraform {
   cloud {
     organization = "882edn"
     workspaces {
-      name = "uat-882edn-vpn"
+      name = "pandawelch/wireguard-ground-up/main"
     }
   }
 
