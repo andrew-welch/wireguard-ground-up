@@ -7,27 +7,27 @@ packer {
   }
 }
 
-variable "AZURE_CLIENT_ID" {
+variable "AZ_CLIENT_ID" {
   default = env("AZURE_CLIENT_ID")
 }
 
-variable "AZURE_CLIENT_SECRET" {
+variable "AZ_CLIENT_SECRET" {
   default = env("AZURE_CLIENT_SECRET")
 }
 
-variable "AZURE_SUBSCRIPTION_ID" {
+variable "AZ_SUBSCRIPTION_ID" {
   default = env("AZURE_SUBSCRIPTION_ID")
 }
 
-variable "AZURE_TENANT_ID" {
+variable "AZ_TENANT_ID" {
   default = env("AZURE_TENANT_ID")
 }
 
 source "azure-arm" "image-create" {
-    client_id           = AZURE_CLIENT_ID
-    client_secret       = AZURE_CLIENT_SECRET
-    subscription_id     = AZURE_SUBSCRIPTION_ID
-    tenant_id           = AZURE_TENANT_ID
+    client_id           = var.AZ_CLIENT_ID
+    client_secret       = var.AZ_CLIENT_SECRET
+    subscription_id     = var.AZ_SUBSCRIPTION_ID
+    tenant_id           = var.AZ_TENANT_ID
 
     managed_image_name = "az-wireguard-image-noconfig"
     managed_image_resource_group_name = "az-wireguard-ground-up"
