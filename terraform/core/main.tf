@@ -9,6 +9,13 @@ terraform {
 
   required_version = ">= 1.1.0"
 
+  cloud {
+    organization = "882edn"
+    workspaces {
+      name = "uat-882edn-vpn"
+    }
+  }
+
 }
 
 provider "azurerm" {
