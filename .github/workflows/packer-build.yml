@@ -4,6 +4,8 @@ name: Packer
 
 on:
   push:
+    branches: 
+      - 'main'
     paths:
       - 'packer/**'
       - '.github/workflows/packerbuild.yml'
