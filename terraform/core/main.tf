@@ -12,7 +12,7 @@ terraform {
   cloud {
     organization = "882edn"
     workspaces {
-      name = "pandawelch/wireguard-ground-up/main"
+      name = "pandawelch_wireguard-ground-up_main"
     }
   }
 
