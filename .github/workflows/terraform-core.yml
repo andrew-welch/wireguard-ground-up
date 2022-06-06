@@ -79,7 +79,8 @@ jobs:
         cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
 
     - name: Terraform DEBUG
-      run: echo ARM_SUBSCRIPTION_ID
+      run: |
+        echo $ARM_SUBSCRIPTION_ID
 
     # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
     - name: Terraform Init
