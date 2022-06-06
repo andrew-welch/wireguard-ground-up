@@ -7,11 +7,13 @@ packer {
   }
 }
 
+
+
 source "azure-arm" "image-create" {
-    client_id           = sensitive_client_id
-    client_secret       = sensitive_client_secret
-    subscription_id     = sensitive_subscription_id
-    tenant_id           = sensitive_tenant_id
+    client_id           = AZURE_CLIENT_ID
+    client_secret       = AZURE_CLIENT_SECRET
+    subscription_id     = AZURE_SUBSCRIPTION_ID
+    tenant_id           = AZURE_TENANT_ID
 
     managed_image_name = "az-wireguard-image-noconfig"
     managed_image_resource_group_name = "az-wireguard-ground-up"
