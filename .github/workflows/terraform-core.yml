@@ -46,8 +46,6 @@ name: 'Terraform-core'
 
 on:
   push:
-    branches:
-    - "main"
     paths:
     - "terraform/core/**"
 
