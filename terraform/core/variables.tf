@@ -5,3 +5,5 @@ variable "resource_location" {
 variable "resource_group_name" {
   default = "az-wireguard-ground-up"
 }
+
+#poke
