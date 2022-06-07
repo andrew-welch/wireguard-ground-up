@@ -5,6 +5,10 @@ terraform {
       source  = "hashicorp/azurerm"
       version = ">= 3.8.0"
     }
+    random = {
+      source  = "hashicorp/random"
+      version = "= 3.2.0"
+    }
   }
 
   required_version = ">= 1.1.0"
@@ -22,6 +26,10 @@ provider "azurerm" {
   features {}
 }
 
+resource "random_string" "randomstr" {
+  length           = 43
+  special          = false
+}
 
 resource "azurerm_resource_group" "rg" {
   name     = var.resource_group_name
@@ -43,6 +51,24 @@ resource "azurerm_storage_account" "SA" {
   }
 }
 
+# File Share in storage account. Access policy is 2 years
+resource "azurerm_storage_share" "FS" {
+  name                 = "wgfileshare"
+  storage_account_name = azurerm_storage_account.SA.name
+  quota                = 2
+  access_tier          = "Hot"
+  lifecycle {
+    prevent_destroy = true
+  }
+  acl {
+    id = random_string.randomstr.result
+    access_policy {
+      permissions = "rwdl"
+      start       = timestamp()
+      expiry      = timeadd(timestamp(),"17520h")
+    }
+  }
+}
 
 # Create a virtual network
 resource "azurerm_virtual_network" "vnet" {
