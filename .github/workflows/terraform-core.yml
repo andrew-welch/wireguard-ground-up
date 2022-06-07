@@ -48,6 +48,9 @@ on:
   push:
     paths:
     - "terraform/core/**"
+  pull_request:
+    branches:
+    - main
 
 jobs:
   terraform:
