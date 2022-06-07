@@ -43,5 +43,20 @@ resource "azurerm_storage_account" "SA" {
   }
 }
 
+
+# Create a virtual network
+resource "azurerm_virtual_network" "vnet" {
+  name                = "WGgroundup-VPN-vnet"
+  address_space       = ["172.30.0.0/16"]
+  location            = azurerm_resource_group.rg.location
+  resource_group_name = azurerm_resource_group.rg.name
+}
+
+resource "azurerm_subnet" "singlenet" {
+  name                = "WG-VPN-single"
+  address_prefixes    = ["172.30.1.0/24"]
+  resource_group_name = azurerm_resource_group.rg.name
+  virtual_network_name=azurerm_virtual_network.vnet.name
+}
 #ping
 #push to main
