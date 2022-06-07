@@ -129,7 +129,7 @@ resource "azurerm_network_security_rule" "nsr-WG" {
   network_security_group_name = azurerm_network_security_group.vpn-NSG.name
 }
 */
-
+/*
 resource "azurerm_network_security_rule" "nsr-SSH" {
   name                        = "temp-ssh"
   priority                    = 106
@@ -143,7 +143,7 @@ resource "azurerm_network_security_rule" "nsr-SSH" {
   resource_group_name         = azurerm_resource_group.rg.name
   network_security_group_name = azurerm_network_security_group.vpn-NSG.name
 }
-
+*/
 /*
 resource "azurerm_subnet_network_security_group_association" "nsg-sn-conn" {
   subnet_id      = azurerm_subnet.singlenet.id
