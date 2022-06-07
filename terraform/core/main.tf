@@ -65,7 +65,7 @@ resource "azurerm_storage_share" "FS" {
     prevent_destroy = true
   }
   acl {
-    id = randomstr
+    id = random_string.randomstr.result
     access_policy {
       permissions = "rwdl"
       start       = timestamp()
