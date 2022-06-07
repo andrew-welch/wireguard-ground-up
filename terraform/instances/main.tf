@@ -50,6 +50,7 @@ resource "azurerm_storage_account" "SA" {
   }
 }
 */
+/*
 resource "azurerm_storage_share" "FS" {
   name                 = "wgfileshare"
   storage_account_name = azurerm_storage_account.SA.name
@@ -67,7 +68,7 @@ resource "azurerm_storage_share" "FS" {
     }
   }
 }
-
+*/
 /*
 
 # Create a virtual network

@@ -43,6 +43,24 @@ resource "azurerm_storage_account" "SA" {
   }
 }
 
+# File Share in storage account. Access policy is 2 years
+resource "azurerm_storage_share" "FS" {
+  name                 = "wgfileshare"
+  storage_account_name = azurerm_storage_account.SA.name
+  quota                = 2
+  access_tier          = "Hot"
+  lifecycle {
+    prevent_destroy = true
+  }
+  acl {
+    id = randomstr
+    access_policy {
+      permissions = "rwdl"
+      start       = timestamp()
+      expiry      = timeadd(timestamp(),"17520h")
+    }
+  }
+}
 
 # Create a virtual network
 resource "azurerm_virtual_network" "vnet" {
