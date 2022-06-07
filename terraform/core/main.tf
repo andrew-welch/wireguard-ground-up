@@ -5,6 +5,10 @@ terraform {
       source  = "hashicorp/azurerm"
       version = ">= 3.8.0"
     }
+    random = {
+      source  = "hashicorp/random"
+      version = "= 3.2.0"
+    }
   }
 
   required_version = ">= 1.1.0"
@@ -22,6 +26,9 @@ provider "azurerm" {
   features {}
 }
 
+provider "random" {
+  features {}
+}
 
 resource "azurerm_resource_group" "rg" {
   name     = var.resource_group_name
