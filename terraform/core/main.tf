@@ -84,5 +84,29 @@ resource "azurerm_subnet" "singlenet" {
   resource_group_name = azurerm_resource_group.rg.name
   virtual_network_name=azurerm_virtual_network.vnet.name
 }
-#ping
-#push to main
+
+
+resource "azurerm_network_security_group" "vpn-NSG" {
+  name                = "WG_webserver"
+  location            = azurerm_resource_group.rg.location
+  resource_group_name = azurerm_resource_group.rg.name
+}
+
+resource "azurerm_network_security_rule" "nsr-WG" {
+  name                        = "WG-traffic"
+  priority                    = 105
+  direction                   = "Inbound"
+  access                      = "Allow"
+  protocol                    = "Udp"
+  source_port_range           = "*"
+  destination_port_range      = "51820"
+  source_address_prefix       = "*"
+  destination_address_prefix  = "*"
+  resource_group_name         = azurerm_resource_group.rg.name
+  network_security_group_name = azurerm_network_security_group.vpn-NSG.name
+}
+
+resource "azurerm_subnet_network_security_group_association" "nsg-sn-conn" {
+  subnet_id      = azurerm_subnet.singlenet.id
+  network_security_group_id = azurerm_network_security_group.vpn-NSG.id
+}
