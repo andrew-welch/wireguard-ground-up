@@ -81,6 +81,15 @@ jobs:
       id: init
       run: terraform init
 
+    - name: Terraform fmt
+      id: fmt
+      run: terraform format -check
+      continue-on-error: true
+
+    - name: Terraform Validate
+      id: validate
+      run: terraform validate -no-color
+
     # Generates an execution plan for Terraform
     - name: Terraform Plan
       id: plan
