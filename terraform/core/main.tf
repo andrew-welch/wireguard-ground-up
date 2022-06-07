@@ -26,10 +26,6 @@ provider "azurerm" {
   features {}
 }
 
-provider "random" {
-  features {}
-}
-
 resource "random_string" "randomstr" {
   length           = 43
   special          = false
