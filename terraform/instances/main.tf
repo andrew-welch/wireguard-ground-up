@@ -108,6 +108,7 @@ resource "azurerm_network_interface" "extnic" {
   }
 }
 
+/*
 resource "azurerm_network_security_group" "vpn-NSG" {
   name                = "WG_webserver"
   location            = azurerm_resource_group.rg.location
@@ -127,6 +128,7 @@ resource "azurerm_network_security_rule" "nsr-WG" {
   resource_group_name         = azurerm_resource_group.rg.name
   network_security_group_name = azurerm_network_security_group.vpn-NSG.name
 }
+*/
 
 resource "azurerm_network_security_rule" "nsr-SSH" {
   name                        = "temp-ssh"
@@ -142,10 +144,12 @@ resource "azurerm_network_security_rule" "nsr-SSH" {
   network_security_group_name = azurerm_network_security_group.vpn-NSG.name
 }
 
+/*
 resource "azurerm_subnet_network_security_group_association" "nsg-sn-conn" {
   subnet_id      = azurerm_subnet.singlenet.id
   network_security_group_id = azurerm_network_security_group.vpn-NSG.id
 }
+*/
 
 resource "azurerm_linux_virtual_machine" "WG-VPN" {
   name                = "WG-VPN"
