@@ -42,7 +42,7 @@ jobs:
         uses: hashicorp/packer-github-actions@master
         with:
           command: build
-          arguments: "-color=false -on-error=abort" -force
+          arguments: "-color=false -on-error=abort -force"
           target: az-wireguard-image.pkr.hcl
           working_directory: packer
         env:
