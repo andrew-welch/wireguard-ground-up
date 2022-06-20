@@ -29,9 +29,9 @@ source "azure-arm" "image-create" {
     managed_image_resource_group_name = "az-wireguard-ground-up"
 
     os_type         = "Linux"
-    image_publisher = "canonical"
-    image_offer     = "0001-com-ubuntu-server-focal"
-    image_sku       = "20_04-lts-gen2"
+    image_publisher = "debian"
+    image_offer     = "debian-10"
+    image_sku       = "10"
 
     azure_tags = {
         managed = "packer"
