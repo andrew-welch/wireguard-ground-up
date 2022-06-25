@@ -149,7 +149,7 @@ resource "azurerm_linux_virtual_machine" "WG-VPN" {
     storage_account_type = "Standard_LRS"
   }
 
-  source_image_id = data.azurerm_managed_disk.packerbuilt.id
+  source_image_id = data.azurerm_image.packerbuilt.id
                                     
   identity {
     type = "SystemAssigned"
