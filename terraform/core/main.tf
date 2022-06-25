@@ -26,6 +26,13 @@ provider "azurerm" {
   features {}
 }
 
+data "azurerm_managed_disk" "packerbuilt" {
+  name                = "az-wireguard-image-noconfig"
+  resource_group_name = azurerm_resource_group.rg.name
+}
+
+
+
 resource "random_string" "randomstr" {
   length           = 43
   special          = false
@@ -123,4 +130,106 @@ resource "azurerm_network_security_rule" "nsr-SSH" {
 resource "azurerm_subnet_network_security_group_association" "nsg-sn-conn" {
   subnet_id      = azurerm_subnet.singlenet.id
   network_security_group_id = azurerm_network_security_group.vpn-NSG.id
+}
+
+resource "azurerm_linux_virtual_machine" "WG-VPN" {
+  name                = "WG-VPN"
+  resource_group_name = azurerm_resource_group.rg.name
+  location            = azurerm_resource_group.rg.location
+  size                = "Standard_B1s"
+  admin_username      = "admin"
+  network_interface_ids = [
+    azurerm_network_interface.extnic.id,
+  ]
+  admin_password = var.aw_password
+  disable_password_authentication = false
+
+  os_disk {
+    caching              = "ReadWrite"
+    storage_account_type = "Standard_LRS"
+  }
+
+  source_image_id = data.azurerm_managed_disk.packerbuilt.id
+                                    
+  identity {
+    type = "SystemAssigned"
+  }
+
+  connection {
+    type = "ssh"
+    user = self.admin_username
+    password = var.password
+    host = self.public_ip_address
+  }
+
+  provisioner "remote-exec" {
+    inline = [
+      "storageAccountName=\"${azurerm_storage_account.SA.name}\"",
+      "fileShareName=\"${azurerm_storage_share.FS.name}\"",
+      "mntRoot=\"/mnt\"",
+      "mntPath=\"$mntRoot/$storageAccountName/$fileShareName\"",
+      "sudo mkdir -p $mntPath",
+      "credentialRoot=\"/etc/smbcredentials\"",
+      "sudo mkdir -p $credentialRoot",
+      "smbCredentialFile=\"$credentialRoot/$storageAccountName.cred\"",
+      "storageAccountKey=\"${azurerm_storage_account.SA.primary_access_key}\"",
+      "echo \"username=$storageAccountName\" | sudo tee $smbCredentialFile > /dev/null",
+      "echo \"password=$storageAccountKey\" | sudo tee -a $smbCredentialFile > /dev/null",
+      "httpEndpoint=\"${azurerm_storage_account.SA.primary_file_endpoint}\"",
+      "smbPath=$(echo $httpEndpoint | cut -c7-$(expr length $httpEndpoint))$fileShareName",
+      "if [ -z \"$(grep $smbPath\\ $mntPath /etc/fstab)\" ]; then",
+      "echo \"$smbPath $mntPath cifs nofail,credentials=$smbCredentialFile,serverino,nosharesock,actimeo=30\" | sudo tee -a /etc/fstab > /dev/null",
+      "else",
+      "echo \"/etc/fstab was not modified to avoid conflicting entries as this Azure file share was already present. You may want to double check /etc/fstab to ensure the configuration is as desired.\"",
+      "fi",
+      "sudo mount -a",
+      #post mount
+      "sudo mkdir -p $mntPath/wg/keys",
+      "sudo mkdir -p $mntPath/wg/clients",
+      "sudo mkdir -p $mntPath/wg/keys/server",
+      "umask 077",
+      "serverKey=\"$mntPath/wg/keys/server/server_private_key\"",
+      "if [ ! -f \"$serverKey\" ]; then ",
+        "sudo wg genkey | sudo tee $mntPath/wg/keys/server/server_private_key > /dev/null",
+        "sudo cat $mntPath/wg/keys/server/server_private_key | sudo wg pubkey | sudo tee $mntPath/wg/keys/server/server_public_key",
+      "fi",
+      "echo \"",
+      "[Interface]",
+      "Address = 10.200.200.1/24",
+      "SaveConfig = true",
+      "ListenPort = 51820",
+      "PrivateKey=$(cat $mntPath/wg/keys/server/server_private_key)\" | sudo tee /etc/wireguard/wg0.conf",
+      "sudo wg-quick up wg0",
+      "sudo systemctl enable wg-quick@wg0"
+      #Need to add any existing configs
+    ]
+  }
+
+}
+
+resource "azurerm_public_ip" "pip" {
+  name                = "WG-pip"
+  resource_group_name = azurerm_resource_group.rg.name
+  location            = azurerm_resource_group.rg.location
+  allocation_method   = "Static"
+  sku                 = "Standard"
+}
+
+resource "azurerm_network_interface" "extnic" {
+  name                = "single-nic"
+  location            = azurerm_resource_group.rg.location
+  resource_group_name = azurerm_resource_group.rg.name
+  enable_ip_forwarding = true
+  ip_configuration {
+    name                          = "primary"
+    subnet_id                     = azurerm_subnet.singlenet.id
+    private_ip_address_allocation = "Dynamic"
+    public_ip_address_id          = azurerm_public_ip.pip.id
+  }
+}
+
+resource "azurerm_role_assignment" "vpn-data-assign" {
+  scope              = azurerm_storage_account.SA.id
+  role_definition_name = "Contributor"
+  principal_id       = azurerm_linux_virtual_machine.WG-VPN.identity[0].principal_id
 }
