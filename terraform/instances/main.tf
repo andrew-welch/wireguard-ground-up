@@ -186,8 +186,7 @@ resource "azurerm_linux_virtual_machine" "WG-VPN" {
     inline = [
       "storageAccountName=\"${azurerm_storage_account.SA.name}\"",
       "fileShareName=\"${azurerm_storage_share.FS.name}\"",
-      "mntRoot=\"/mnt\"",
-      "mntPath=\"$mntRoot/$storageAccountName/$fileShareName\"",
+      "mntPath=\"/mnt/$storageAccountName/$fileShareName\"",
       "sudo mkdir -p $mntPath",
       "credentialRoot=\"/etc/smbcredentials\"",
       "sudo mkdir -p $credentialRoot",
@@ -199,8 +198,6 @@ resource "azurerm_linux_virtual_machine" "WG-VPN" {
       "smbPath=$(echo $httpEndpoint | cut -c7-$(expr length $httpEndpoint))$fileShareName",
       "if [ -z \"$(grep $smbPath\\ $mntPath /etc/fstab)\" ]; then",
       "echo \"$smbPath $mntPath cifs nofail,credentials=$smbCredentialFile,serverino,nosharesock,actimeo=30\" | sudo tee -a /etc/fstab > /dev/null",
-      "else",
-      "echo \"/etc/fstab was not modified to avoid conflicting entries as this Azure file share was already present. You may want to double check /etc/fstab to ensure the configuration is as desired.\"",
       "fi",
       "sudo mount -a",
       #post mount
@@ -218,9 +215,9 @@ resource "azurerm_linux_virtual_machine" "WG-VPN" {
       "Address = 10.200.200.1/24",
       "SaveConfig = true",
       "ListenPort = 51820",
-      "PrivateKey=$(cat $mntPath/wg/keys/server/server_private_key)\" | sudo tee /etc/wireguard/wg0.conf",
+      "PrivateKey=$(cat $mntPath/wg/keys/server/server_private_key)\" | sudo tee /etc/wireguard/wg0.conf > /dev/null",
       "sudo wg-quick up wg0",
-      "sudo systemctl enable wg-quick@wg0"
+      "sudo systemctl enable wg-quick@wg0.service"
       #Need to add any existing configs
     ]
   }
@@ -235,7 +232,7 @@ resource "azurerm_role_assignment" "vpn-data-assign" {
 
 # TODO: Add zone back
 
-
+/*
 resource "azurerm_dns_a_record" "target" {
   name                = "vpn"
   zone_name           = var.domain-name
@@ -243,3 +240,4 @@ resource "azurerm_dns_a_record" "target" {
   ttl                 = 300
   target_resource_id  = azurerm_public_ip.pip.id
 }
+*/
