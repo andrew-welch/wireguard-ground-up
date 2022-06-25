@@ -158,7 +158,7 @@ resource "azurerm_linux_virtual_machine" "WG-VPN" {
   connection {
     type = "ssh"
     user = self.admin_username
-    password = var.password
+    password = var.aw_password
     host = self.public_ip_address
   }
 
