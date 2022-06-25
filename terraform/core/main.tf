@@ -28,7 +28,7 @@ provider "azurerm" {
 
 data "azurerm_image" "packerbuilt" {
   name                = "az-wireguard-image-noconfig"
-  resource_group_name = "az-wireguard-ground-up-image"
+  resource_group_name = "az-wireguard-ground-up"
 }
 
 
