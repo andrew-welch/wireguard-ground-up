@@ -3,7 +3,7 @@ variable "resource_location" {
 }
 
 variable "resource_group_name" {
-  default = "WG-VPN"
+  default = "az-wireguard-ground-up"
 }
 
 
