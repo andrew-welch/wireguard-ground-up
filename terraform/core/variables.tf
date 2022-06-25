@@ -7,7 +7,7 @@ variable "resource_group_name" {
 }
 
 
-variable "password" {
+variable "aw_password" {
   default = "a1b2c3d4e5f6G7"
 }
 
