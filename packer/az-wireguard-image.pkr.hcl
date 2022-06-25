@@ -26,7 +26,7 @@ source "azure-arm" "image-create" {
     subscription_id     = var.AZ_SUBSCRIPTION_ID
 
     managed_image_name = "az-wireguard-image-noconfig"
-    managed_image_resource_group_name = "az-wireguard-ground-up"
+    managed_image_resource_group_name = "az-wireguard-ground-up-image"
 
     os_type         = "Linux"
     image_publisher = "debian"
