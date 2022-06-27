@@ -33,6 +33,7 @@ data "azurerm_image" "packerbuilt" {
 
 
 
+
 resource "random_string" "randomstr" {
   length           = 43
   special          = false
