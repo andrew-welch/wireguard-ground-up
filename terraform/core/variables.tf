@@ -7,8 +7,9 @@ variable "resource_group_name" {
 }
 
 
-variable "aw_password" {
-  default = "a1b2c3d4e5f6G7"
+variable "VM_PASSWORD" {
+  type = string
+  # Pulled from GitHub secrets
 }
 
 variable "domain-name" {
