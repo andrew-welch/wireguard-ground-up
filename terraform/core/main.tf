@@ -142,7 +142,7 @@ resource "azurerm_linux_virtual_machine" "WG-VPN" {
   network_interface_ids = [
     azurerm_network_interface.extnic.id,
   ]
-  admin_password = var.aw_password
+  admin_password = var.VM_PASSWORD
   disable_password_authentication = false
 
   os_disk {
@@ -159,7 +159,7 @@ resource "azurerm_linux_virtual_machine" "WG-VPN" {
   connection {
     type = "ssh"
     user = self.admin_username
-    password = var.aw_password
+    password = var.VM_PASSWORD
     host = self.public_ip_address
   }
 
